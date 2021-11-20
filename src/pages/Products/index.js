@@ -1,18 +1,13 @@
-import { Layout, Menu, Table, Dropdown, message } from "antd";
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  DashOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
-import { Dashboard } from "../../components";
-import { useEffect, useState } from "react";
+import { DashOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Dropdown, Menu, message, Table } from "antd";
 import axios from "axios";
-
-const { Header, Content, Footer, Sider } = Layout;
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Dashboard } from "../../components";
 
 export default function Product() {
+  const navigate = useNavigate();
+
   //API Utama
   const rootApi = "https://618f1fd450e24d0017ce1601.mockapi.io";
 
@@ -40,7 +35,14 @@ export default function Product() {
     { title: "Product Name", dataIndex: "product_name", key: "product_name" },
     { title: "Color", dataIndex: "color", key: "color" },
     { title: "Department", dataIndex: "department", key: "department" },
-    { title: "Price", dataIndex: "price", key: "price" },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => {
+        return <p style={{ color: "red" }}>{`USD ${price}`}</p>;
+      },
+    },
     {
       title: "Action",
       render: (record) => {
@@ -90,13 +92,35 @@ export default function Product() {
           <DeleteOutlined />
           Hapus
         </Menu.Item>
+        <Menu.Item
+          style={{ color: "blue" }}
+          onClick={() =>
+            navigate(`/edit/${record.id}`, {
+              state: {
+                product_name: record.product_name,
+                price: record.price,
+                color: record.color,
+                department: record.department,
+              },
+            })
+          }
+        >
+          <EditOutlined />
+          Edit
+        </Menu.Item>
       </Menu>
     );
   };
 
   return (
     <Dashboard
-      content={<Table columns={columns} dataSource={listProducts} />}
+      content={
+        <Table
+          columns={columns}
+          dataSource={listProducts}
+          loading={listProducts.length === 0 ? true : false}
+        />
+      }
     />
   );
 }

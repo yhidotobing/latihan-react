@@ -1,16 +1,13 @@
 import React from "react";
-import { Layout, Menu, Table, Dropdown } from "antd";
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  DashOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { Layout, Menu } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function Dashboard({ content }) {
+  const navigate = useNavigate();
+
   return (
     <div>
       <Layout>
@@ -26,8 +23,19 @@ export default function Dashboard({ content }) {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
+            <Menu.Item
+              key="1"
+              icon={<UserOutlined />}
+              onClick={() => navigate("/")}
+            >
               Product
+            </Menu.Item>
+            <Menu.Item
+              key="2"
+              icon={<UserOutlined />}
+              onClick={() => navigate("/add")}
+            >
+              Add Product
             </Menu.Item>
           </Menu>
         </Sider>
